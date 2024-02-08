@@ -1,0 +1,224 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <limits>
+
+using namespace std;
+
+struct Objeto {
+    string nombre;
+    int cantidad;
+};
+
+struct Animal {
+    string nombre;
+    int cantidad;
+};
+
+// Funciones del primer código
+void mostrarInventario(const Objeto inventario[], int tam) {
+    cout << "Inventario actual:" << endl;
+    for (int i = 0; i < tam; ++i) {
+        cout << "Nombre: " << inventario[i].nombre << ", Cantidad: " << inventario[i].cantidad << endl;
+    }
+    cout << "-----------------------------" << endl;
+}
+
+void agregarObjeto(Objeto inventario[], int &tam) {
+    string nombre;
+    int cantidad;
+
+    cout << "Ingrese el nombre del objeto: ";
+    cin >> nombre;
+    cout << "Ingrese la cantidad: ";
+    cin >> cantidad;
+
+    inventario[tam].nombre = nombre;
+    inventario[tam].cantidad = cantidad;
+    ++tam;
+
+    cout << "Objeto agregado al inventario." << endl;
+}
+
+void quitarObjeto(Objeto inventario[], int &tam) {
+    string nombre;
+
+    cout << "Ingrese el nombre del objeto que desea quitar: ";
+    cin >> nombre;
+
+    for (int i = 0; i < tam; ++i) {
+        if (inventario[i].nombre == nombre) {
+
+            int cantidadQuitada;
+            cout << "Ingrese la cantidad que desea quitar: ";
+            cin >> cantidadQuitada;
+
+            if (cantidadQuitada <= inventario[i].cantidad) {
+                inventario[i].cantidad -= cantidadQuitada;
+                cout << "Objeto quitado del inventario." << endl;
+
+            } else {
+                cout << "No hay suficiente cantidad para quitar." << endl;
+            }
+
+            return; 
+        }
+    }
+
+    cout << "El objeto no está en el inventario." << endl;
+}
+
+// Funciones del segundo código
+void obtenerPreferencias(vector<string>& preferencias) {
+    cout << "Por favor, ingrese la información del animal:" << endl;
+
+    cout << "1. Tipo de alimentación (vegetariano, carnivoro, omnivoro, etc.): ";
+    string tipoAlimentacion;
+    cin >> tipoAlimentacion;
+    preferencias.push_back(tipoAlimentacion);
+
+    cout << "2. Edad del animal: ";
+    int edad;
+    cin >> edad;
+    preferencias.push_back(to_string(edad));
+
+    cout << "3. Estado del animal (saludable, enfermo, anciano, etc.): ";
+    string estado;
+    cin >> estado;
+    preferencias.push_back(estado);
+
+    // Limpiar el búfer de entrada
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+void recomendarAlimentos(const string& tipoAnimal, const vector<string>& preferencias) {
+    unordered_map<string, int> alimentosNecesarios;
+
+    for (const string& preferencia : preferencias) {
+        if (preferencia == "vegetariano") {
+            alimentosNecesarios["Frutas"] += 3; 
+            alimentosNecesarios["Verduras"] += 4; 
+            alimentosNecesarios["Legumbres"] += 2; 
+        }
+
+        if (preferencia == "carnivoro") {
+            alimentosNecesarios["Carne"] += 5; 
+            alimentosNecesarios["Pescado"] += 3; 
+        }
+
+        if (preferencia == "omnivoro") {
+            alimentosNecesarios["Frutas"] += 2;
+            alimentosNecesarios["Verduras"] += 3;
+            alimentosNecesarios["Carne"] += 4;
+        }
+    }
+
+    cout << "Cantidad de alimentos recomendados para " << tipoAnimal << " (" << preferencias.back() << "):" << endl;
+
+    if (preferencias.back() == "saludable") {
+        cout << "- Ofrecer agua fresca diariamente." << endl;
+        cout << "- Proporcionar una dieta balanceada según las preferencias alimentarias." << endl;
+    } else if (preferencias.back() == "enfermo") {
+        cout << "- Consultar con el veterinario para una dieta específica según la enfermedad." << endl;
+        cout << "- Mantener la hidratación con agua fresca y limpia." << endl;
+    } else if (preferencias.back() == "anciano") {
+        cout << "- Considerar una dieta baja en grasas para animales ancianos." << endl;
+        cout << "- Ofrecer alimentos que promuevan la salud articular." << endl;
+    } else {
+        cout << "- Recomendaciones generales para el estado del animal." << endl;
+    }
+
+    cout << "Cantidad de alimentos recomendados:" << endl;
+    for (const auto& par : alimentosNecesarios) {
+        cout << "- " << par.first << ": " << par.second << " unidades diarias" << endl;
+    }
+}
+
+// Funciones del tercer código
+void mostrarInventarioAnimales(const Animal inventario[], int tam) {
+    cout << "Inventario actual de animales:" << endl;
+    for (int i = 0; i < tam; ++i) {
+        cout << "Nombre: " << inventario[i].nombre << ", Cantidad: " << inventario[i].cantidad << endl;
+    }
+    cout << "-----------------------------" << endl;
+}
+
+void agregarAnimal(Animal inventario[], int &tam) {
+    string nombre;
+    int cantidad;
+
+    cout << "Ingrese el nombre del animal: ";
+    cin >> nombre;
+    cout << "Ingrese la cantidad: ";
+    cin >> cantidad;
+
+    inventario[tam].nombre = nombre;
+    inventario[tam].cantidad = cantidad;
+    ++tam;
+
+    cout << "Animal agregado al inventario." << endl;
+}
+
+// Función principal
+int main() {
+    const int capacidadMaxima = 100;
+    Objeto inventario[capacidadMaxima];
+    int tam = 0;
+
+    const int capacidadMaximaAnimales = 100;
+    Animal inventarioAnimales[capacidadMaximaAnimales];
+    int tamAnimales = 0;
+
+    char opcion;
+
+    do {
+        cout << "1. Mostrar inventario de objetos" << endl;
+        cout << "2. Agregar objeto" << endl;
+        cout << "3. Quitar objeto" << endl;
+        cout << "4. Mostrar inventario de animales" << endl;
+        cout << "5. Agregar animal" << endl;
+        cout << "6. Obtener preferencias y recomendar alimentos" << endl;
+        cout << "0. Salir" << endl;
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1:
+                mostrarInventario(inventario, tam);
+                break;
+            case 2:
+                agregarObjeto(inventario, tam);
+                break;
+           
+            case 3:
+                quitarObjeto(inventario, tam);
+                break;
+            case 4:
+                mostrarInventarioAnimales(inventarioAnimales, tamAnimales);
+                break;
+            case 5:
+                agregarAnimal(inventarioAnimales, tamAnimales);
+                break;
+            case 6:
+                {
+                    vector<string> preferencias;
+                    string tipoAnimal;
+
+                    cout << "Ingrese el tipo de animal (por ejemplo, perro, gato, etc.): ";
+                    cin >> tipoAnimal;
+
+                    obtenerPreferencias(preferencias);
+                    recomendarAlimentos(tipoAnimal, preferencias);
+                }
+                break;
+            case 0:
+                cout << "Saliendo del programa." << endl;
+                break;
+            default:
+                cout << "Opción no válida. Inténtelo de nuevo." << endl;
+        }
+    } while (opcion != 0);
+
+    return 0;
+}
